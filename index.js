@@ -42,3 +42,18 @@ app.post('/MarkdownIt', (request, response) => {
 		text: htmlText
 	}))
 })
+app.post('/Guardar', (request, response) => {
+	//console.log(request.body)
+	let markDownText = request.body.text
+	let title = request.body.title
+	//console.log(markDownText)
+	fs.appendFile("./private/"+title+".txt", markDownText, (err) => {
+		if (err) {
+			console.log(err);
+		}else {
+			response.end(JSON.stringify({
+				text: "Se guardo el archivo"
+			}))
+		}
+	});
+})
