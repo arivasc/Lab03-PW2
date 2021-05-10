@@ -25,7 +25,7 @@ function Crear(){
 				var texto = document.getElementById('textoMarkdow').value;
 				if (texto) {
 					e.preventDefault();
-					console.log(texto);
+					markdown(texto);
 				}else{
 					alert('Ingrese palabras');
 				}
@@ -33,3 +33,23 @@ function Crear(){
 		}
 		)
 	}
+function markdown(markupText) {
+
+		const url = 'http://localhost:3000/MarkdownIt'
+		const data = {
+			text: markupText
+		}
+		const request = {
+		method: 'POST', // Podría ser GET
+		headers: { 'Content-Type': 'application/json' },
+		body: JSON.stringify(data),
+	}
+	fetch(url, request)
+	.then(
+		response => response.json()
+		).then(
+		data => {
+			console.log(data.text) 
+		}
+	) 		
+}
