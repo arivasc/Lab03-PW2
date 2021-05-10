@@ -57,3 +57,15 @@ app.post('/Guardar', (request, response) => {
 		}
 	});
 })
+app.get('/Listar',(request,response)=>{
+	fs.readdir("./private/", function (err, archivos) {
+		if (err) {
+			onError(err);
+			return;
+		}else {
+			response.end(JSON.stringify({
+				text: archivos
+			}))
+		}
+	});
+})

@@ -81,3 +81,28 @@ function Guardar(){
 		}
 	)
 }
+function Lista(){
+	const url = 'http://localhost:3000/Listar';
+	fetch(url)
+	.then(
+		response => response.json() 
+		).then(
+		data => {
+			var lista_archivos = "<h3>Paginas creadas</h3><ul>";
+			for(archivos of data.text){
+				console.log(archivos)
+				lista_archivos += `<li>${archivos} &nbsp
+				<button onclick='Editar()'>Editar</button> 
+				<button onclick='Ver()'>Ver Pagina</button> 
+				<button onclick='Eliminar()'>Eliminar</button></li>`;
+			}
+			lista_archivos += "</ul>";
+			document.querySelector("#lista").innerHTML = lista_archivos;
+			document.querySelector("#openlista").setAttribute("onclick","Listasoff()");
+		}
+	)
+}
+function Listasoff(){
+	document.querySelector("#lista").innerHTML = "";
+	document.querySelector("#openlista").setAttribute("onclick","Lista()");
+}
