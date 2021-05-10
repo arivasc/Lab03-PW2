@@ -49,7 +49,12 @@ function markdown(markupText) {
 		response => response.json()
 		).then(
 		data => {
-			console.log(data.text) 
+			document.querySelector("#htmlcode").innerHTML =data.text
+			const button = document.createElement('button'); 
+			button.type = 'button'; 
+			button.innerText = 'Guardar'; 
+			button.setAttribute('onclick','Guardar();');
+			document.body.appendChild(button); 
 		}
 	) 		
 }
