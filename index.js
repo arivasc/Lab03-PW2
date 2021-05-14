@@ -58,14 +58,39 @@ app.post('/Guardar', (request, response) => {
 	});
 })
 app.get('/Listar',(request,response)=>{
-	fs.readdir("./private/", function (err, archivos) {
+	fs.readdir(path.resolve(__dirname, 'private/'), (err, archivos) => {
 		if (err) {
-			onError(err);
+			console.error(err);
+			response.status(500).json({
+				error: 'message'
+			})
 			return;
-		}else {
-			response.end(JSON.stringify({
-				text: archivos
-			}))
 		}
+		//console.log(archivos);
+		response.json(archivos);
+		//response.end(JSON.stringify({
+		//text: archivos
+		//}))
+		
 	});
+})
+
+app.post('/mostrar', (request, response) => {
+	let name = request.body.text;
+	fs.readFile(path.resolve(__dirname, 'private/'+name), 'utf8',
+		(err, data) => {
+			if (err) {
+				console.error(err)
+				response.status(500).json({
+					error: 'message'
+				})
+				return
+			}
+			let htmlText = md.render(data);
+			response.setHeader('Content-Type', 'application/json');
+			response.end(JSON.stringify({
+				text: htmlText
+			}))
+			
+	})
 })
