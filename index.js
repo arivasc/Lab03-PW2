@@ -3,6 +3,7 @@ const path = require('path');
 const express = require('express');
 const bp = require('body-parser');
 const { request } = require('http');
+const multer = require('multer');
 const { response } = require('express');
 const MarkdownIt = require('markdown-it'),
 md = new MarkdownIt();
@@ -12,6 +13,15 @@ app.use(bp.json())
 app.use(bp.urlencoded({
 	extended: true
 }))
+const storage = multer.diskStorage({
+	destination : 'private/',
+	filename : function(request,file,callback){
+		callback("",file.originalname);
+	}
+})
+const upload = multer({
+	storage : storage
+})
 app.listen(3000, () => {
 	console.log("Escuchando en: http://localhost:3000")
 })
@@ -125,7 +135,40 @@ app.post('/editar', (request, response) => {
 			response.status(500).json({
 				error: 'message'
 			})
-			return
+			return data
+		}else{
+			response.end(JSON.stringify({
+				text: data
+			}))
 		}
 	})
+})
+app.get('/SubirArchivo',(request,response)=>{
+	fs.readFile(path.resolve(__dirname, 'public/upload.html'), 'utf8',
+		(err, data) => {
+			if (err) {
+				console.error(err)
+				response.status(500).json({
+					error: 'message'
+				})
+				return
+			}
+			response.json({
+				text: data
+		})
+	})
+})
+app.post('/ArchivoSubido',upload.single('archivoupload'),(request,response)=>{
+	response.json({
+			text: "Se subio el archivo"
+	})
+	/*fs.appendFile("./private/"+title+".txt", markDownText, (err) => {
+		if (err) {
+			console.log(err);
+		}else {
+			response.end(JSON.stringify({
+				text: "Se guardo el archivo"
+			}))
+		}
+	});*/
 })

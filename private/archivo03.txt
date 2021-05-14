@@ -1,5 +1,0 @@
-# Nuevo archivo
-* con items
-* mas items
-* el ultimo item
-## Adios!

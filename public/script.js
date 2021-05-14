@@ -163,12 +163,35 @@ function Editar(titulo){
 		response => response.json()
 	).then(
 		data => {
-			document.querySelector("#creacion").innerHTML = "";
-			document.querySelector("#mostrar").innerHTML = data.text;
+			Edit(titulo,data.text)
 		}
 	)
 
 }
+function Edit(title,texto){
+	document.querySelector("#creacion").innerHTML = "";
+	const url = 'http://localhost:3000/Crear';
+	fetch(url).then(
+		response => response.json()
+		).then(
+		data => {
+			document.querySelector("#creacion").innerHTML = data.text
+			document.getElementById('title').value=title;
+			document.getElementById('title').setAttribute('readonly','');
+			document.getElementById('textoMarkdow').value=texto;
+			var form = document.getElementById('form');
+			form.addEventListener('submit',function(e){
+				var texto = document.getElementById('textoMarkdow').value;
+				if (texto) {
+					e.preventDefault();
+					markdown(texto);
+				}else{
+					alert('Ingrese palabras');
+				}
+			});
+		}
+		)
+	}
 
 function Eliminar(titulo){
 	const url = 'http://localhost:3000/eliminar';
@@ -195,4 +218,45 @@ function Eliminar(titulo){
 		
 	)
 
+}
+function Uploadfile(){
+			const url = 'http://localhost:3000/SubirArchivo';
+			fetch(url).then(
+				response => response.json()
+				).then(
+				data => {
+					document.querySelector("#Upload").innerHTML = data.text
+					document.querySelector("#Uploadfile").setAttribute("onclick","Uploadoff()");
+			}
+			)
+		}
+function Uploadoff(){
+				document.querySelector("#Upload").innerHTML = "";
+				document.querySelector("#Uploadfile").setAttribute("onclick","Uploadfile()");
+			}
+
+function comprueba_extension(formulario, archivo) {
+	extensiones_permitidas = ".txt";
+	mierror = "";
+	if (!archivo) {
+    mierror = "No has seleccionado ningún archivo";
+ 	}else{
+    extension = (archivo.substring(archivo.lastIndexOf("."))).toLowerCase();
+    alert (extension);
+    permitida = false;
+    if (extensiones_permitidas == extension) {
+      	permitida = true;
+    }
+    if (!permitida) {
+     mierror = "Comprueba la extensión de los archivos a subir. \nSólo se pueden subir archivos con extensiones: .txt ";
+    }else{
+          //submito!
+          alert ("Todo correcto. Voy a submitir el formulario.");
+          formulario.submit();
+          return 1;
+      }
+  }
+   //si estoy aqui es que no se ha podido submitir
+   alert (mierror);
+   return 0;
 }
