@@ -184,11 +184,15 @@ function Eliminar(titulo){
 	}
 	http = fetch(url, request);
 	http.then(
-		response => response.json()
-	).then(
+			
+		response => response.json() 
+		).then(
 		data => {
-			Lista();
+			alert(data.text);
+			location.reload();
+			//Lista();
 		}
+		
 	)
 
 }

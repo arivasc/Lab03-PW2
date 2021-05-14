@@ -2,6 +2,8 @@ const fs = require('fs');
 const path = require('path');
 const express = require('express');
 const bp = require('body-parser');
+const { request } = require('http');
+const { response } = require('express');
 const MarkdownIt = require('markdown-it'),
 md = new MarkdownIt();
 const app = express();
@@ -92,5 +94,38 @@ app.post('/mostrar', (request, response) => {
 				text: htmlText
 			}))
 			
+	})
+})
+
+app.post('/eliminar', (request, response) => {
+	let name = request.body.text;
+	fs.unlink(path.resolve(__dirname, 'private/'+name),
+	(err) => {
+		if (err) {
+			console.error(err);
+			response.status(500).json({
+				error: 'message'
+			})
+			
+			return
+		}
+		console.log("File deleted!");
+		response.end(JSON.stringify({
+			text: "Se elimino el archivo "+name
+		}))
+	})
+})
+
+app.post('/editar', (request, response) => {
+	let name = request.body.text;
+	fs.readFile(path.resolve(__dirname, 'private/'+name), 'utf8',
+	(err, data) => {
+		if (err) {
+			console.error(err);
+			response.status(500).json({
+				error: 'message'
+			})
+			return
+		}
 	})
 })
